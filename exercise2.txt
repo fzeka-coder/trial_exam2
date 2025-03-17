@@ -1,5 +1,26 @@
-#[sudo] password for guest: [guest@vbox ~]$ cd trial_exam2
-#[guest@vbox trial_exam2]$ ls
-#exercise1.txt  README.md
-#[guest@vbox trial_exam2]$ touch exercise2.txt
-#[guest@vbox trial_exam2]$ 
+DB(staffNo, dentistName, PatientNo, PatientName, (appointmentdate, time), surgeryNo)UNF
+DB(staffNo, dentistName, PatientNo, PatientName, (appointmentdate, time), surgeryNo)
+
+
+
+1NF:
+DB(staffNo, dentistName,*PatientNo*, PatientName, *Appointmentdate*,*Appointmenttime*, surgeryNo)
+
+
+
+
+2NF:
+is in 1NF
+No partial dependencies
+
+staff(*staffno*, dentistname)
+patients(*patientno*, patientname, surgeryNo)
+appointmentsDB(staffNo,*PatientNo*,*Appointmentdate*,*Appointmenttime*)
+
+
+
+3NF:
+staff(*staffno*, dentistname)
+patients(*patientno*, patientname)
+appointmentsDB(staffNo,*PatientNo*,*Appointmentdate*,*Appointmenttime*)
+patients(*patientno*, surgeryNo)
