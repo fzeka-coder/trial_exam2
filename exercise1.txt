@@ -1,0 +1,6 @@
+#exercise1
+#git clone git@github.com:fzeka-coder/trial_exam2.git
+#cd trial_exam2
+#git remote #to check
+#touch exercise1.txt
+#nano exercise1.txt
