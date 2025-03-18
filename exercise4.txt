@@ -1,0 +1,81 @@
+#Opstarten
+$ mysql -u root –p
+>create database vacation;
+>Grant all on vacation.* to 'fzeka'@'localhost’;
+>flush privileges;
+>exit
+$ mysql vacation < vacation.sql
+$ mysql
+>use vacation
+>show tables
+
+>use vacation;
+>show tables;
+>Select guestname, guestaddress from guest order by guestname;
+>Select hotelno, type, price from room where (hotelno LIKE 'f%' or hotelno LIKE 'd%') AND price>40;
+>Select * from booking where dateto IS NULL;
+
+#AVG
+>Select *, AVG(price) from room Group BY hotelno;
+> Select type, AVG(price) from room Group BY type;
+>Select AVG(price) from room;
+
+#SUM:
+>Select type, sum(price) from room group by type;  160 is the answer
+>SELECT * from booking where MONTH(datefrom)=8 or MONTH(dateto)=8
+>Select room.price, room.type, hotel.hotelname FROM room JOIN hotel ON room.hotelno=hotel.hotelno
+WHERE hotel.hotelname="Omni Shoreham";
+
+>Select guest.guestname, hotel.hotelname 
+FROM guest 
+JOIN booking ON guest.guestno=booking.guestno
+Join hotel ON booking.hotelno=hotel.hotelno 
+WHERE hotel.hotelname='Omni Shoreham’;
+
+#Join on two columns
+>select booking.guestno, booking.datefrom, booking.dateto, room.*, guest.* From booking 
+Join room ON booking.hotelno=room.hotelno AND booking.roomno=room.roomno
+Join hotel on hotel.hotelno=booking.hotelno 
+JOIN guest ON guest.guestno=booking.guestno
+WHERE hotel.hotelname="Latham";
+
+#Calculate income per day.
+>select  SUM(DATEDIFF(booking.dateto, booking.datefrom)*room.price) 
+From booking
+Join room ON booking.hotelno=room.hotelno AND booking.roomno=room.roomno 
+Join hotel on hotel.hotelno=booking.hotelno
+WHERE hotel.hotelname="The Tower Hotel";
+
+#Unocupied rooms (left join and NULLs for right)
+Select room.*, booking.* from room LEFT join booking ON booking.hotelno=room.hotelno AND booking.roomno=room.roomno JOIN hotel ON hotel.hotelno=room.hotelno where booking.roomno IS NULL and booking.hotelno IS NULL;
+
+#Lost income:
+> select datediff(max(dateto), min(datefrom)) from booking  total days to be booked 3042
+
+> Select (datediff(max(dateto), min(datefrom))*18) + (datediff(max(dateto), min(datefrom))*35) from booking as lost_income  multiplied with price per room per day  161226
+
+#Count after joining and filtering, and group
+select COUNT(*) as no_rooms_London, hotel.hotelname 
+from room 
+join hotel on room.hotelno=hotel.hotelno 
+where hotel.city="London" 
+group by hotel.hotelname;t
+
+>select booking.roomno, hotel.city,hotel.hotelname, room.type, count(room.type) as type_freq from booking join hotel on hotel.hotelno=booking.hotelno join room on booking.hotelno=room.hotelno AND booking.roomno=room.roomno where hotel.city='London' group by hotel.hotelname, room.type;
+
+
+> update room set price=price*1.05
+
+
+>SELECT subquery.hotelname, subquery.type, MAX(subquery.type_freq) AS max_typefreq 
+FROM (
+SELECT hotel.hotelname, room.type, COUNT(room.type) AS type_freq   
+FROM booking
+JOIN hotel ON hotel.hotelno = booking hotelno 
+JOIN room ON booking.hotelno = room.hotelno AND booking.roomno = room.roomno
+WHERE hotel.city = 'London’ 
+GROUP BY hotel.hotelname, room.type ) AS subquery GROUP BY subquery.hotelname;
+
+
+
+#Queries
