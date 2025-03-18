@@ -21,7 +21,8 @@ $ mysql
 >Select AVG(price) from room;
 
 #SUM:
->Select type, sum(price) from room group by type;  160 is the answer
+>Select type, sum(price) from room group by type;
+#  160 is the answer
 >SELECT * from booking where MONTH(datefrom)=8 or MONTH(dateto)=8
 >Select room.price, room.type, hotel.hotelname FROM room JOIN hotel ON room.hotelno=hotel.hotelno
 WHERE hotel.hotelname="Omni Shoreham";
