@@ -1,0 +1,76 @@
+$ mongoimport restaurants.json
+$ mongosh
+> use test
+
+###
+db.restaurants.find({},{_id:0, restaurant_id:1, name:1, borough:1, cuisine:1});
+  {
+    borough: 'Brooklyn',
+    cuisine: 'American',
+    name: 'The Movable Feast',
+    restaurant_id: '40361606'
+  }
+
+###
+test> db.restaurants.find({borough:"Bronx"},{_id:0, restaurant_id:1, name:1, borough:1, cuisine:1}).skip(5).limit(5); 
+[
+  {
+    borough: 'Bronx',
+    cuisine: 'American',
+    name: 'Manhem Club',
+    restaurant_id: '40364363'
+  },
+  {
+    borough: 'Bronx',
+    cuisine: 'American',
+    name: 'The New Starling Athletic Club Of The Bronx',
+    restaurant_id: '40364956'
+  },
+  {
+    borough: 'Bronx',
+    cuisine: 'American',
+    name: 'Yankee Tavern',
+    restaurant_id: '40365499'
+  },
+  {
+    borough: 'Bronx',
+    cuisine: 'Irish',
+    name: 'Mcdwyers Pub',
+    restaurant_id: '40365893'
+  },
+  {
+    borough: 'Bronx',
+    cuisine: 'American',
+    name: 'The Punch Bowl',
+    restaurant_id: '40366497'
+  }
+]
+
+test> db.restaurants.find({"grades.score":{$gt: 90}})
+#3records
+
+#
+test> db.restaurants.find({cuisinie: {$ne: "American"}, "grades.score": {$gt: 70}, "coord.1":{$lt: -65754168}})
+#no dcuments, before filtering with latitude 9 documents.
+
+#
+db.restaurants.find({borough:"Bronx",$or:[{cuisine:"American"},{cuisine:"Chinese"}]});
+
+#
+db.restaurants.find({},{})
+
+
+#
+db.restaurants.find({borough: {$ne:{$in:['Staten Island','Queens', 'Bronxor Brooklyn']}}},{_id:0, restaurant_id:1, name:1, borough:1, cuisine:1})
+
+#
+test> db.restaurants.find({grades:{$not:{$elemMatch:{score:{$lt:10}}}}},{_id:0, restaurant_id:1, name:1, borough:1, cuisine:1})
+
+#
+db.restaurants.find({"grades.date":ISODate("2014-08-11T00:00:00Z")},{_id:0, restaurant_id:1, name:1, grades:1})
+
+#
+db.restaurants.find({},{ _id: 0, restaurant_id: 1, name: 1, borough: 1, cuisine: 1 }).sort({ cuisine: 1, borough: -1 });
+
+#
+db.restaurants.find({"address.street":{$exists: true}}).
